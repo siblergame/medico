@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Perfil</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f7;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+            padding-top: 40px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            background-color: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+
+        .profile-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-header img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin-right: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-header h2 {
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .table-container {
+            width: 100%;
+            margin-top: 20px;
+            overflow-x: auto;
+        }
+        .table-containers {
+            width: 100%;
+            margin-top: 20px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px 20px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #0071e3;
+            color: white;
+            font-weight: 600;
+        }
+
+        td {
+            background-color: #f9f9f9;
+        }
+
+        button {
+            background-color: #0071e3;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-right: 10px;
+        }
+
+        button:hover {
+            background-color: #005bb5;
+        }
+
+        .message {
+            margin-top: 15px;
+            font-size: 16px;
+            color: green;
+            display: none;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            width: 300px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-content button {
+            width: 80px;
+            margin-top: 10px;
+        }
+
+        .add-doctor-btn {
+            background-color: #28a745;
+        }
+
+        .add-doctor-btn:hover {
+            background-color: #218838;
+        }
+
+        .edit-btn {
+            background-color: #ffc107;
+        }
+
+        .edit-btn:hover {
+            background-color: #e0a800;
+        }
+
+        .delete-btn {
+            background-color: #dc3545;
+        }
+
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+
+        .add-payment-btn {
+            background-color: #17a2b8;
+        }
+
+        .add-payment-btn:hover {
+            background-color: #138496;
+        }
+
+        .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .modal-content {
+        background-color: #fff;
+        padding: 20px;
+        width: 400px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        position: relative;
+    }
+
+    h3 {
+        margin-top: 0;
+        font-size: 24px;
+        color: #333;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 16px;
+        box-sizing: border-box;
+        transition: border-color 0.3s ease;
+    }
+
+    .form-group input:focus {
+        border-color: #0071e3;
+        outline: none;
+    }
+
+    .modal-buttons {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .save-btn, .cancel-btn {
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+        width: 48%;
+    }
+
+    .save-btn {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .save-btn:hover {
+        background-color: #218838;
+    }
+
+    .cancel-btn {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .cancel-btn:hover {
+        background-color: #c82333;
+    }
+
+    .logout-btn {
+    background-color: #dc3545; /* Rojo */
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+.logout-btn:hover {
+    background-color: #c82333;
+}
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Encabezado del perfil con foto y nombre -->
+    <div class="profile-header">
+        <img src="img/doctor.jpg" alt="Foto de perfil">
+        <h2>Administrador Dr. Carlos Martínez</h2> <!-- Nombre del doctor -->
+    </div>
+
+    <h1>Próximas Citas</h1>
+    <button class="add-doctor-btn" onclick="generatePDF()">reporte de Consulta</button>
+
+
+    <div class="table-containers">
+        <table>
+            <thead>
+                <tr>
+                    <th>Paciente</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Consultorio</th>
+                    <th>Precio</th>
+                    <th>Acción</th>
+                    <th>Agregar Pago</th>
+                    <th>Eliminar</th> <!-- Nueva columna para eliminar cita -->
+                </tr>
+            </thead>
+            <tbody>
+                <tr id="appointment-1">
+                    <td>Juan Pérez</td>
+                    <td>2024-11-01</td>
+                    <td>10:00 AM</td>
+                    <td>Consultorio 1</td>
+                    <td>$150</td>
+                    <td><button onclick="notifyAppointment(this)">Notificar</button></td>
+                    <td><button class="add-payment-btn" onclick="addPayment(this)">Agregar Pago</button></td>
+                    <td><button class="delete-btn" onclick="deleteAppointment('appointment-1')">Eliminar</button></td>
+                </tr>
+                <tr id="appointment-2">
+                    <td>María García</td>
+                    <td>2024-11-02</td>
+                    <td>12:30 PM</td>
+                    <td>Consultorio 2</td>
+                    <td>$150</td>
+                    <td><button onclick="notifyAppointment(this)">Notificar</button></td>
+                    <td><button class="add-payment-btn" onclick="addPayment(this)">Agregar Pago</button></td>
+                    <td><button class="delete-btn" onclick="deleteAppointment('appointment-2')">Eliminar</button></td>
+                </tr>
+                <tr id="appointment-3">
+                    <td>Carlos López</td>
+                    <td>2024-11-03</td>
+                    <td>02:00 PM</td>
+                    <td>Consultorio 3</td>
+                    <td>$150</td>
+                    <td><button onclick="notifyAppointment(this)">Notificar</button></td>
+                    <td><button class="add-payment-btn" onclick="addPayment(this)">Agregar Pago</button></td>
+                    <td><button class="delete-btn" onclick="deleteAppointment('appointment-3')">Eliminar</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <br><br>
+    <h1>Lista de Médicos</h1>
+
+    <!-- Botón para añadir médico -->
+    <button class="add-doctor-btn" onclick="openDoctorModal()">Añadir Médico</button>
+
+    <!-- Tabla de médicos -->
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellido Paterno</th>
+                    <th>Apellido Materno</th>
+                    <th>Especialidad</th>
+                    <th>Teléfono</th>
+                    <th>Fecha de Contratación</th>
+                    <th>Correo Electrónico</th>
+                    <th>Dirección</th>
+                    <th>Número de Cédula</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody id="doctorTableBody">
+                <!-- Fila de ejemplo -->
+                <tr id="doctor-row-1">
+                    <td>Juan</td>
+                    <td>Pérez</td>
+                    <td>González</td>
+                    <td>Cardiología</td>
+                    <td>555-1234</td>
+                    <td>2022-01-01</td>
+                    <td>juan.perez@example.com</td>
+                    <td>123 Calle Falsa</td>
+                    <td>ABC123456</td>
+                    <td>
+                        <button class="edit-btn" onclick="editDoctor(this, 'doctor-row-1')">Editar</button>
+                        <button class="delete-btn" onclick="deleteDoctor('doctor-row-1')">Eliminar</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- Botón de Cerrar sesión -->
+ <div >
+    <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
+ </div>
+</div>
+
+<!-- Modal para añadir/editar médicos -->
+<div id="doctorModal" class="modal">
+    <div class="modal-content">
+        <h3 id="modalDoctorTitle">Añadir Médico</h3>
+        <div class="form-group">
+            <label for="doctorName">Nombre:</label>
+            <input type="text" id="doctorName">
+        </div>
+        <div class="form-group">
+            <label for="doctorLastNameP">Apellido Paterno:</label>
+            <input type="text" id="doctorLastNameP">
+        </div>
+        <div class="form-group">
+            <label for="doctorLastNameM">Apellido Materno:</label>
+            <input type="text" id="doctorLastNameM">
+        </div>
+        <div class="form-group">
+            <label for="doctorSpecialty">Especialidad:</label>
+            <input type="text" id="doctorSpecialty">
+        </div>
+        <div class="form-group">
+            <label for="doctorPhone">Teléfono:</label>
+            <input type="text" id="doctorPhone">
+        </div>
+        <div class="form-group">
+            <label for="doctorHireDate">Fecha de Contratación:</label>
+            <input type="date" id="doctorHireDate">
+        </div>
+        <div class="form-group">
+            <label for="doctorEmail">Correo Electrónico:</label>
+            <input type="email" id="doctorEmail">
+        </div>
+        <div class="form-group">
+            <label for="doctorAddress">Dirección:</label>
+            <input type="text" id="doctorAddress">
+        </div>
+        <div class="form-group">
+            <label for="doctorLicense">Número de Cédula:</label>
+            <input type="text" id="doctorLicense">
+        </div>
+        <div class="modal-buttons">
+            <button class="save-btn" onclick="saveDoctor()">Guardar</button>
+            <button class="cancel-btn" onclick="closeDoctorModal()">Cancelar</button>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+<!-- Modal de confirmación de eliminación -->
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <h3>¿Estás seguro de que deseas eliminar este médico?</h3>
+        <button onclick="confirmDeleteDoctor()">Sí</button>
+        <button onclick="closeDeleteModal()">No</button>
+    </div>
+</div>
+
+<!-- Modal de confirmación de pago -->
+
+<div id="paymentConfirmationModal" class="modal">
+    <div class="modal-content">
+        <p id="paymentPrice"></p> <!-- Mostrar el precio de la consulta -->
+        <button onclick="confirmPayment()">Confirmar Pago</button>
+        <button onclick="closeModal()">Cancelar</button>
+    </div>
+</div>
+
+
+
+<script>
+    let deleteDoctorId = null; // Almacenar el ID del médico a eliminar o editar
+    let isEditMode = false; // Indicar si estamos editando o agregando un médico nuevo
+
+    // Función para abrir el modal de añadir/editar médico
+    function openDoctorModal() {
+        document.getElementById('doctorModal').style.display = 'flex';
+        resetDoctorForm();
+        isEditMode = false; // Estamos añadiendo un médico nuevo
+    }
+
+    // Función para cerrar el modal de añadir/editar médico
+    function closeDoctorModal() {
+        document.getElementById('doctorModal').style.display = 'none';
+    }
+
+    // Función para resetear el formulario de añadir/editar médico
+    function resetDoctorForm() {
+        document.getElementById('doctorName').value = '';
+        document.getElementById('doctorLastNameP').value = '';
+        document.getElementById('doctorLastNameM').value = '';
+        document.getElementById('doctorSpecialty').value = '';
+        document.getElementById('doctorPhone').value = '';
+        document.getElementById('doctorHireDate').value = '';
+        document.getElementById('doctorEmail').value = '';
+        document.getElementById('doctorAddress').value = '';
+        document.getElementById('doctorLicense').value = '';
+    }
+
+    // Función para guardar un nuevo médico o editar uno existente
+    function saveDoctor() {
+        const name = document.getElementById('doctorName').value;
+        const lastNameP = document.getElementById('doctorLastNameP').value;
+        const lastNameM = document.getElementById('doctorLastNameM').value;
+        const specialty = document.getElementById('doctorSpecialty').value;
+        const phone = document.getElementById('doctorPhone').value;
+        const hireDate = document.getElementById('doctorHireDate').value;
+        const email = document.getElementById('doctorEmail').value;
+        const address = document.getElementById('doctorAddress').value;
+        const license = document.getElementById('doctorLicense').value;
+
+        if (name && lastNameP && lastNameM && specialty && phone && hireDate && email && address && license) {
+            if (isEditMode && deleteDoctorId) {
+                // Editar el médico existente
+                const row = document.getElementById(deleteDoctorId);
+                row.children[0].innerText = name;
+                row.children[1].innerText = lastNameP;
+                row.children[2].innerText = lastNameM;
+                row.children[3].innerText = specialty;
+                row.children[4].innerText = phone;
+                row.children[5].innerText = hireDate;
+                row.children[6].innerText = email;
+                row.children[7].innerText = address;
+                row.children[8].innerText = license;
+            } else {
+                // Añadir un nuevo médico
+                const tableBody = document.getElementById('doctorTableBody');
+                const newRow = tableBody.insertRow();
+                const rowId = `doctor-row-${tableBody.rows.length + 1}`;
+                newRow.id = rowId;
+                newRow.innerHTML = `
+                    <td>${name}</td>
+                    <td>${lastNameP}</td>
+                    <td>${lastNameM}</td>
+                    <td>${specialty}</td>
+                    <td>${phone}</td>
+                    <td>${hireDate}</td>
+                    <td>${email}</td>
+                    <td>${address}</td>
+                    <td>${license}</td>
+                    <td>
+                        <button class="edit-btn" onclick="editDoctor(this, '${rowId}')">Editar</button>
+                        <button class="delete-btn" onclick="deleteDoctor('${rowId}')">Eliminar</button>
+                    </td>
+                `;
+            }
+            closeDoctorModal();
+        } else {
+            alert("Por favor, llene todos los campos.");
+        }
+    }
+
+    // Función para editar un médico
+    function editDoctor(button, rowId) {
+        const row = document.getElementById(rowId).children;
+        document.getElementById('doctorName').value = row[0].innerText;
+        document.getElementById('doctorLastNameP').value = row[1].innerText;
+        document.getElementById('doctorLastNameM').value = row[2].innerText;
+        document.getElementById('doctorSpecialty').value = row[3].innerText;
+        document.getElementById('doctorPhone').value = row[4].innerText;
+        document.getElementById('doctorHireDate').value = row[5].innerText;
+        document.getElementById('doctorEmail').value = row[6].innerText;
+        document.getElementById('doctorAddress').value = row[7].innerText;
+        document.getElementById('doctorLicense').value = row[8].innerText;
+        isEditMode = true;
+        deleteDoctorId = rowId;
+        document.getElementById('modalDoctorTitle').innerText = "Editar Médico";
+        openDoctorModal();
+    }
+
+    // Función para eliminar un médico
+    function deleteDoctor(rowId) {
+        deleteDoctorId = rowId;
+        document.getElementById('deleteModal').style.display = 'flex';
+    }
+
+    // Confirmar eliminación de médico
+    function confirmDeleteDoctor() {
+        if (deleteDoctorId) {
+            document.getElementById(deleteDoctorId).remove();
+            closeDeleteModal();
+        }
+    }
+
+    // Función para cerrar el modal de confirmación de eliminación
+    function closeDeleteModal() {
+        document.getElementById('deleteModal').style.display = 'none';
+    }
+
+    // Función para agregar pago con confirmación
+    
+function addPayment(button) {
+    const selectedPaymentRow = button.parentNode.parentNode; // Almacenar la fila seleccionada
+    const price = selectedPaymentRow.children[4].innerText; // Obtener el precio de la fila seleccionada
+
+    // Mostrar ventana modal para confirmar el pago
+    document.getElementById('paymentConfirmationModal').style.display = 'flex';
+    document.getElementById('paymentPrice').innerText = `Precio: ${price}`;
+}
+
+// Function to confirm the payment
+function confirmPayment() {
+    const price = document.getElementById('paymentPrice').innerText; // Obtener el precio mostrado en la ventana modal
+   
+    // Here, you can include logic to process the payment (e.g., an API call)
+    
+    closeModal(); // Cerrar el modal después de la confirmación
+}
+
+
+// Function to close the modal
+function closeModal() {
+    document.getElementById('paymentConfirmationModal').style.display = 'none'; // Ocultar el modal
+}
+    // Confirmar el pago y notificar al paciente
+
+    function notifyAppointment(buttonElement) {
+    // Obtener la fila del botón que activó la acción
+    const row = buttonElement.closest('tr');
+
+    // Obtener los datos relevantes del paciente y la cita
+    const paciente = row.querySelector('td:nth-child(1)').textContent;
+
+    // Crear un mensaje de notificación
+    const mensaje = `Notificación de pago enviada para: ${paciente}`;
+
+    // Mostrar una alerta como notificación (puede personalizarse con otros métodos como enviar un correo)
+    alert(mensaje);
+}
+
+
+    // Función para cerrar el modal de confirmación de pago
+    function closeModal() {
+        document.getElementById('paymentConfirmationModal').style.display = 'none';
+    }
+
+    // Función para eliminar una cita
+    function deleteAppointment(appointmentId) {
+        document.getElementById(appointmentId).remove();
+        alert("La cita ha sido eliminada satisfactoriamente.");
+    }
+
+    //Funcion de generar PDF
+    function generatePDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    let yPosition = 10; // Inicializamos la posición Y
+
+    // Título del reporte
+    doc.setFontSize(18);
+    doc.text('Reporte de Consultas', 20, yPosition);
+    yPosition += 10; // Espacio para separar el título del resto
+
+    let totalGanancia = 0;  // Variable para acumular el total de ganancias
+
+    // Obtener las filas de la tabla
+    const rows = document.querySelectorAll('.table-containers table tbody tr');
+
+    rows.forEach((row) => {
+        // Obtener los datos de cada fila
+        let nombre = row.cells[0].innerText;  // Nombre del paciente
+        let fecha = row.cells[1].innerText;   // Fecha de la cita
+        let precio = parseFloat(row.cells[4].innerText.replace('$', ''));  // Precio de la cita (sin '$')
+
+        // Agregar los datos al PDF
+        doc.setFontSize(12);
+        doc.text(`Nombre: ${nombre}`, 20, yPosition);
+        yPosition += 6;
+        doc.text(`Fecha: ${fecha}`, 20, yPosition);
+        yPosition += 6;
+        doc.text(`Precio: $${precio}`, 20, yPosition);
+        yPosition += 10;  // Espacio entre citas
+
+        // Acumular la ganancia total
+        totalGanancia += precio;
+    });
+
+    // Agregar el total de ganancias
+    doc.setFontSize(14);
+    doc.text(`Total de Ganancias: $${totalGanancia.toFixed(2)}`, 20, yPosition);
+
+    // Guardar el PDF
+    doc.save('reporte_consultas.pdf');
+}
+
+
+//cerrar sesion 
+// Función para cerrar sesión y redirigir al índice
+function logout() {
+    // Redirige al archivo 'index.html' (puedes cambiarlo si tu archivo de índice tiene otro nombre o ruta)
+    window.location.href = 'index.html';
+}
+
+
+</script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+
+</body>
+</html>

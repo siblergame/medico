@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de Doctor y Gestión de Citas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Estilos existentes */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f7;
+            color: #333;
+        }
+
+        .profile-container {
+            max-width: 990px;
+            margin: 50px auto;
+            background-color: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .doctor-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 40px;
+        }
+
+        .doctor-info img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+        }
+
+        .doctor-details {
+            flex-grow: 1;
+            margin-left: 20px;
+        }
+
+        .doctor-details h2 {
+            margin: 0;
+            font-size: 24px;
+            color: #0071e3;
+        }
+
+        .doctor-details p {
+            margin: 5px 0;
+            font-size: 16px;
+            color: #555;
+        }
+
+        .appointments {
+            margin-top: 20px;
+        }
+
+        .add-appointment {
+            text-align: right;
+            margin-bottom: 10px;
+        }
+
+        .add-appointment button {
+            background-color: #0071e3;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .add-appointment button i {
+            margin-right: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #0071e3;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .actions button {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            color: #0071e3;
+        }
+
+        .actions button:hover {
+            color: #005bb5;
+        }
+
+        .actions i {
+            font-size: 18px;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 400px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .modal-header {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .modal .form-group {
+            margin-bottom: 15px;
+        }
+
+        .modal .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .modal .form-group input {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: center;
+        }
+
+        .modal-footer button {
+            padding: 10px 15px;
+            margin-left: 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .modal-footer .cancel-btn {
+            background-color: #ddd;
+        }
+
+        .modal-footer .confirm-btn {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .modal-footer .confirm-btn:hover {
+            background-color: #c0392b;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .logout-btn {
+    background-color: #dc3545; /* Rojo */
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+.logout-btn:hover {
+    background-color: #c82333;
+}
+    </style>
+</head>
+<body>
+
+<div class="profile-container">
+    <h1>Bienvenido</h1>
+
+    <div class="doctor-info">
+        <img src="img/smith.jpg" alt="Doctor Image">
+        <div class="doctor-details">
+            <h2>Dr. John Smith</h2>
+            <p>Especialidad: Cardiología</p>
+            <p>Email: dr.john@example.com</p>
+            <p>Teléfono: +1 234 567 890</p>
+        </div>
+    </div>
+
+    <!-- Sección de Citas -->
+    <div class="appointments">
+        <h2>Próximas Citas</h2>
+        <div class="add-appointment">
+            <button onclick="openAppointmentModal()"><i class="fas fa-plus"></i> Añadir cita</button>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre de Paciente</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Consultorio</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody id="appointmentTableBody">
+                <tr id="appointment-row-1">
+                    <td>John Doe</td>
+                    <td>2024-10-20</td>
+                    <td>10:00 AM</td>
+                    <td>101</td>
+                    <td class="actions">
+                        <button onclick="editAppointment(this, 'appointment-row-1')"><i class="fas fa-edit"></i></button>
+                        <button onclick="deleteAppointment('appointment-row-1')"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div >
+        <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
+     </div>
+</div>
+
+<!-- Modal para citas -->
+<div id="appointmentModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeAppointmentModal()">&times;</span>
+        <div class="modal-header" id="modalAppointmentTitle">Añadir nueva cita</div>
+        <div class="form-group">
+            <label for="patientName">Nombre de paciente</label>
+            <input type="text" id="patientName" placeholder="Ingresa el nombre del paciente">
+        </div>
+        <div class="form-group">
+            <label for="appointmentDate">Fecha</label>
+            <input type="date" id="appointmentDate">
+        </div>
+        <div class="form-group">
+            <label for="appointmentTime">Hora</label>
+            <input type="time" id="appointmentTime">
+        </div>
+        <div class="form-group">
+            <label for="consultorio">Consultorio</label>
+            <input type="text" id="consultorio" placeholder="Ingresa el número de consultorio">
+        </div>
+        <div class="modal-footer">
+            <button class="cancel-btn" onclick="closeAppointmentModal()">Cancelar</button>
+            <button class="save-btn" onclick="saveAppointment()">Guardar</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de confirmación para eliminar -->
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header" id="deleteModalTitle">¿Estás seguro de que deseas eliminar?</div>
+        <div class="modal-footer">
+            <button class="confirm-btn" onclick="deleteConfirmed()">Sí</button>
+            <button class="cancel-btn" onclick="closeDeleteModal()">No</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let deleteAction = null; // Store the delete action (appointment)
+    let deleteItemId = null; // Store the row id to be deleted or edited
+
+    // Open Appointment Modal
+    function openAppointmentModal() {
+        document.getElementById('appointmentModal').style.display = 'flex';
+        document.getElementById('modalAppointmentTitle').innerText = "Añadir nueva cita";
+        resetAppointmentForm();
+    }
+
+    // Close Appointment Modal
+    function closeAppointmentModal() {
+        document.getElementById('appointmentModal').style.display = 'none';
+    }
+
+    // Save Appointment
+    function saveAppointment() {
+        const patientName = document.getElementById('patientName').value;
+        const appointmentDate = document.getElementById('appointmentDate').value;
+        const appointmentTime = document.getElementById('appointmentTime').value;
+        const consultorio = document.getElementById('consultorio').value;
+
+        if (patientName && appointmentDate && appointmentTime && consultorio) {
+            if (deleteItemId) {
+                // Editar cita existente
+                const row = document.getElementById(deleteItemId);
+                row.innerHTML = `
+                    <td>${patientName}</td>
+                    <td>${appointmentDate}</td>
+                    <td>${appointmentTime}</td>
+                    <td>${consultorio}</td>
+                    <td class="actions">
+                        <button onclick="editAppointment(this, '${deleteItemId}')"><i class="fas fa-edit"></i></button>
+                        <button onclick="deleteAppointment('${deleteItemId}')"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                `;
+            } else {
+                // Agregar nueva cita
+                const tableBody = document.getElementById('appointmentTableBody');
+                const newRow = tableBody.insertRow();
+                const rowId = `appointment-row-${tableBody.rows.length + 1}`;
+                newRow.id = rowId;
+                newRow.innerHTML = `
+                    <td>${patientName}</td>
+                    <td>${appointmentDate}</td>
+                    <td>${appointmentTime}</td>
+                    <td>${consultorio}</td>
+                    <td class="actions">
+                        <button onclick="editAppointment(this, '${rowId}')"><i class="fas fa-edit"></i></button>
+                        <button onclick="deleteAppointment('${rowId}')"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                `;
+            }
+
+            closeAppointmentModal();
+        } else {
+            alert("Por favor llene todos los campos.");
+        }
+    }
+
+    // Edit Appointment
+    function editAppointment(button, rowId) {
+        const row = document.getElementById(rowId).children;
+        document.getElementById('patientName').value = row[0].innerText;
+        document.getElementById('appointmentDate').value = row[1].innerText;
+        document.getElementById('appointmentTime').value = row[2].innerText;
+        document.getElementById('consultorio').value = row[3].innerText;
+        deleteItemId = rowId;
+        document.getElementById('modalAppointmentTitle').innerText = "Editar cita";
+        openAppointmentModal();
+    }
+
+    // Delete Appointment
+    function deleteAppointment(rowId) {
+        deleteItemId = rowId;
+        document.getElementById('deleteModalTitle').innerText = `¿Estás seguro de que deseas eliminar la cita?`;
+        deleteAction = 'appointment';
+        document.getElementById('deleteModal').style.display = 'flex';
+    }
+
+    // Delete Confirmed
+    function deleteConfirmed() {
+        if (deleteAction === 'appointment') {
+            document.getElementById(deleteItemId).remove();
+            alert("Cita eliminada correctamente.");
+        }
+        closeDeleteModal();
+    }
+
+    // Close Delete Modal
+    function closeDeleteModal() {
+        document.getElementById('deleteModal').style.display = 'none';
+    }
+
+    // Reset Appointment Form
+    function resetAppointmentForm() {
+        document.getElementById('patientName').value = '';
+        document.getElementById('appointmentDate').value = '';
+        document.getElementById('appointmentTime').value = '';
+        document.getElementById('consultorio').value = '';
+        deleteItemId = null;
+    }
+
+    //cerrar sesion 
+    function logout() {
+    // Redirige al archivo 'index.html' (puedes cambiarlo si tu archivo de índice tiene otro nombre o ruta)
+    window.location.href = 'index.html';
+}
+</script>
+
+</body>
+</html>

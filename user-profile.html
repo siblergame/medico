@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Citas con Confirmación de Agregado, Modificación y Eliminación</title>
+    <link rel="stylesheet" href="css/estilos_user.css">
+</head>
+<script>
+    let editIndex = -1; // Variable para almacenar el índice de la fila a editar
+let appointments = []; // Array para almacenar las citas
+
+// Función para manejar agregar o modificar una cita
+function handleAddOrUpdate() {
+    const name = document.getElementById("name").value;
+    const consultorio = document.getElementById("consultorio").value;
+    const servicio = document.getElementById("servicio").value;
+    const date = document.getElementById("appointmentDate").value;
+    const time = document.getElementById("appointmentTime").value;
+
+    if (editIndex === -1) {
+        // Agregar una nueva cita
+        appointments.push({ name, consultorio, servicio, date, time });
+    } else {
+        // Modificar la cita existente
+        appointments[editIndex] = { name, consultorio, servicio, date, time };
+        editIndex = -1; // Resetear el índice después de editar
+        document.getElementById("submitBtn").innerText = "Agregar Cita";
+    }
+
+    resetForm();
+    renderTable();
+}
+
+// Función para eliminar una cita
+function deleteAppointment(index) {
+    editIndex = index;
+    document.getElementById('deleteConfirmationModal').style.display = 'block'; // Mostrar modal de confirmación
+}
+
+// Función para confirmar eliminación
+function confirmDelete() {
+    appointments.splice(editIndex, 1);
+    editIndex = -1;
+    renderTable();
+    closeDeleteModal();
+}
+
+// Función para cerrar el modal de eliminación
+function closeDeleteModal() {
+    document.getElementById('deleteConfirmationModal').style.display = 'none';
+}
+
+// Función para modificar una cita
+function editAppointment(index) {
+    const appointment = appointments[index];
+    document.getElementById("name").value = appointment.name;
+    document.getElementById("consultorio").value = appointment.consultorio;
+    document.getElementById("servicio").value = appointment.servicio;
+    document.getElementById("appointmentDate").value = appointment.date;
+    document.getElementById("appointmentTime").value = appointment.time;
+
+    editIndex = index; // Establecer el índice de edición
+    document.getElementById("submitBtn").innerText = "Modificar Cita"; // Cambiar el texto del botón
+}
+
+// Función para mostrar las citas en la tabla
+function renderTable() {
+    const tableBody = document.querySelector("#appointmentTable tbody");
+    tableBody.innerHTML = ""; // Limpiar la tabla antes de renderizar
+
+    appointments.forEach((appointment, index) => {
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+            <td>${appointment.name}</td>
+            <td>${appointment.consultorio}</td>
+            <td>${appointment.servicio}</td>
+            <td>${appointment.date}</td>
+            <td>${appointment.time}</td>
+            <td>
+                <button onclick="editAppointment(${index})">Modificar</button>
+                <button onclick="deleteAppointment(${index})">Eliminar</button>
+            </td>
+        `;
+
+        tableBody.appendChild(row);
+    });
+}
+
+// Función para resetear el formulario
+function resetForm() {
+    document.getElementById("name").value = "";
+    document.getElementById("consultorio").value = "";
+    document.getElementById("servicio").value = "";
+    document.getElementById("appointmentDate").value = "";
+    document.getElementById("appointmentTime").value = "";
+}
+
+</script>
+<body>
+<div class="container">
+    <!-- Encabezado del perfil -->
+    <div class="profile-header">
+        <img src="img/usuario.jfif" alt="Foto de perfil del usuario">
+        <h1>Federico Valverde</h1>
+    </div>
+
+    <!-- Formulario para agregar/modificar citas -->
+    <div class="form-container">
+        <h1>Añadir/Modificar Cita</h1>
+        <div class="form-group">
+            <label for="name">Nombre Completo</label>
+            <input type="text" id="name" placeholder="Ingresa el nombre completo">
+        </div>
+        <div class="form-group">
+            <label for="consultorio">Consultorio</label>
+            <input type="text" id="consultorio" placeholder="Número de consultorio">
+        </div>
+        <div class="form-group">
+            <label for="servicio">Servicio</label>
+            <input type="text" id="servicio" placeholder="Ingresa el servicio">
+        </div>
+        <div class="form-group">
+            <label for="appointmentDate">Fecha</label>
+            <input type="date" id="appointmentDate">
+        </div>
+        <div class="form-group">
+            <label for="appointmentTime">Hora</label>
+            <input type="time" id="appointmentTime">
+        </div>
+
+        <button class="submit-btn" id="submitBtn" onclick="handleAddOrUpdate()">Agregar Cita</button>
+        <div id="message" class="message">Cita confirmada exitosamente.</div>
+    </div>
+
+    <!-- Tabla para mostrar las citas -->
+    <div class="table-container">
+        <h2>Citas solicitadas</h2>
+        <table id="appointmentTable">
+            <thead>
+                <tr>
+                    <th>Nombre Completo</th>
+                    <th>Consultorio</th>
+                    <th>Servicio</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Las filas se agregarán aquí dinámicamente -->
+            </tbody>
+        </table>
+    </div>
+    <div >
+        <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
+     </div>
+</div>
+
+<!-- Ventana modal para confirmar eliminación -->
+<div id="deleteConfirmationModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">¿Estás seguro de eliminar esta cita?</div>
+        <div class="modal-body">La cita será eliminada permanentemente.</div>
+        <div class="modal-footer">
+            <button class="yes-btn" onclick="confirmDelete()">Sí</button>
+            <button class="no-btn" onclick="closeDeleteModal()">No</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    //cerrar sesion 
+function logout() {
+    // Redirige al archivo 'index.html' (puedes cambiarlo si tu archivo de índice tiene otro nombre o ruta)
+    window.location.href = 'index.html';
+}
+</script>
+<script src="js/js_user.js"></script>
+</body>
+</html>
